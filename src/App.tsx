@@ -1,5 +1,11 @@
+import { GlobeCanvas } from "./components/GlobeCanvas";
+
 function App() {
-	return <div className="text-3xl font-bold underline">Globe Explorer</div>;
+	return (
+		<div className="h-screen w-screen bg-black">
+			<GlobeCanvas />
+		</div>
+	);
 }
 
 export default App;
