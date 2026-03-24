@@ -1,7 +1,8 @@
 import * as THREE from "three/webgpu";
-import { CoreContext } from "@vladkrutenyuk/three-kvy-core";
+import * as KVY from "@vladkrutenyuk/three-kvy-core";
 import { CameraControlsModule } from "./modules/CameraControlsModule";
 import { TweenModule } from "./modules/TweenModule";
+import { GlobeFeature } from "./features/GlobeFeature";
 
 export type GlobeModules = {
 	cameraControls: CameraControlsModule;
@@ -19,7 +20,7 @@ export async function createGlobeContext() {
 	const scene = new THREE.Scene();
 	const clock = new THREE.Clock();
 
-	return CoreContext.create<GlobeModules>({
+	const ctx = KVY.CoreContext.create<GlobeModules>({
 		renderer,
 		camera,
 		scene,
@@ -29,4 +30,18 @@ export async function createGlobeContext() {
 			tween: new TweenModule(),
 		},
 	});
+
+	const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+	ctx.root.add(ambientLight);
+
+	const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+	directionalLight.position.set(5, 3, 5);
+	ctx.root.add(directionalLight);
+
+	const globeGroup = new THREE.Group();
+	ctx.root.add(globeGroup);
+
+	KVY.addFeature(globeGroup, GlobeFeature);
+
+	return ctx;
 }
