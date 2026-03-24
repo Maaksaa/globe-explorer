@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
+    "@tanstack/react-query": "^5.95.2",
     "@tweenjs/tween.js": "^25.0.0",
     "@vladkrutenyuk/three-kvy-core": "^2.3.8",
     "camera-controls": "^3.1.2",

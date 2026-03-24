@@ -3,6 +3,7 @@ import * as KVY from "@vladkrutenyuk/three-kvy-core";
 import { CameraControlsModule } from "./modules/CameraControlsModule";
 import { TweenModule } from "./modules/TweenModule";
 import { GlobeFeature } from "./features/GlobeFeature";
+import { CountryPickerFeature } from "./features/CountryPickerFeature";
 
 export type GlobeModules = {
 	cameraControls: CameraControlsModule;
@@ -43,6 +44,7 @@ export async function createGlobeContext() {
 	const globeGroup = new THREE.Group();
 	ctx.root.add(globeGroup);
 	KVY.addFeature(globeGroup, GlobeFeature);
+	KVY.addFeature(globeGroup, CountryPickerFeature);
 
 	return ctx;
 }
