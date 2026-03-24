@@ -3,7 +3,6 @@ import * as KVY from "@vladkrutenyuk/three-kvy-core";
 import { CameraControlsModule } from "./modules/CameraControlsModule";
 import { TweenModule } from "./modules/TweenModule";
 import { GlobeFeature } from "./features/GlobeFeature";
-import { loadCountries } from "./loadCountries";
 
 export type GlobeModules = {
 	cameraControls: CameraControlsModule;
@@ -33,20 +32,17 @@ export async function createGlobeContext() {
 	});
 
 	// Освещение
-	const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+	const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
 	ctx.root.add(ambientLight);
 
-	const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+	const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
 	directionalLight.position.set(5, 3, 5);
 	ctx.root.add(directionalLight);
 
-	// Глобус (сфера)
+	// Глобус — сфера с canvas-текстурой стран
 	const globeGroup = new THREE.Group();
 	ctx.root.add(globeGroup);
 	KVY.addFeature(globeGroup, GlobeFeature);
-
-	// Страны поверх сферы
-	loadCountries(ctx);
 
 	return ctx;
 }
