@@ -1,7 +1,9 @@
 import { useGlobeContext } from "./hooks/useGlobeContext";
+import { useTheme } from "./hooks/useTheme";
 import { GlobeCanvas } from "./components/GlobeCanvas";
 import { CountryInfoPanel } from "./components/CountryInfoPanel";
 import { CountryTablePanel } from "./components/CountryTablePanel";
+import { ThemeToggle } from "./components/ThemeToggle";
 
 function App() {
 	const {
@@ -14,18 +16,27 @@ function App() {
 		deselectCountry,
 	} = useGlobeContext();
 
+	const { theme, toggleTheme } = useTheme();
+
+	const hasSelection = !!(selectedCountryId && selectedCountryName);
+
 	return (
-		<div className="relative h-screen w-screen bg-black">
+		<div className="relative h-screen w-screen bg-gray-100 dark:bg-black">
 			<GlobeCanvas containerRef={containerRef} />
 
-			<CountryTablePanel
-				selectedCountryId={selectedCountryId}
-				hoveredCountryId={hoveredCountryId}
-				onHover={hoverCountry}
-				onSelect={selectCountry}
-			/>
+			<ThemeToggle theme={theme} onToggle={toggleTheme} />
 
-			{selectedCountryId && selectedCountryName && (
+			{/* На мобилке: скрываем таблицу когда открыта инфо-панель */}
+			<div className={hasSelection ? "hidden md:contents" : "contents"}>
+				<CountryTablePanel
+					selectedCountryId={selectedCountryId}
+					hoveredCountryId={hoveredCountryId}
+					onHover={hoverCountry}
+					onSelect={selectCountry}
+				/>
+			</div>
+
+			{hasSelection && (
 				<CountryInfoPanel
 					countryId={selectedCountryId}
 					countryName={selectedCountryName}

@@ -58,13 +58,11 @@ export function CountryTablePanel({
 
 	const scrollRef = useRef<HTMLDivElement>(null);
 
-	// Список уникальных регионов для селекта
 	const regions = useMemo(() => {
 		const set = new Set(allCountries.map((c) => c.region).filter(Boolean));
 		return Array.from(set).sort();
 	}, [allCountries]);
 
-	// Предфильтрация по региону до передачи в react-table
 	const data = useMemo(() => {
 		if (!regionFilter) return allCountries;
 		return allCountries.filter((c) => c.region === regionFilter);
@@ -91,14 +89,13 @@ export function CountryTablePanel({
 		overscan: 10,
 	});
 
-	// Автоскролл к выбранной стране (при клике на глобусе)
 	useEffect(() => {
 		if (!selectedCountryId) return;
 		const idx = rows.findIndex((r) => r.original.ccn3 === selectedCountryId);
 		if (idx !== -1) {
 			virtualizer.scrollToIndex(idx, { behavior: "smooth" });
 		}
-	}, [selectedCountryId]); // virtualizer и rows намеренно не в deps — нужна реакция только на смену выбора
+	}, [selectedCountryId]); // virtualizer и rows намеренно не в deps
 
 	const virtualItems = virtualizer.getVirtualItems();
 
@@ -106,45 +103,46 @@ export function CountryTablePanel({
 		<div
 			className={cn(
 				"fixed z-10 flex flex-col",
-				"bg-white/10 backdrop-blur-md border border-white/20 text-white shadow-2xl",
-				// Mobile: снизу
+				"backdrop-blur-md shadow-2xl",
+				"bg-white/80 border border-black/10 text-gray-900",
+				"dark:bg-white/10 dark:border-white/20 dark:text-white",
 				"bottom-0 left-0 right-0 rounded-t-2xl max-h-[50vh]",
-				// Desktop: слева
 				"md:bottom-4 md:left-4 md:right-auto md:top-4 md:w-80 md:rounded-2xl md:max-h-none"
 			)}
 		>
 			{/* Фильтры */}
-			<div className="px-3 pt-3 pb-2 border-b border-white/20 shrink-0 space-y-2">
-				<h2 className="text-xs font-semibold uppercase tracking-wide text-white/50">
+			<div className="px-3 pt-3 pb-2 border-b border-black/10 dark:border-white/20 shrink-0 space-y-2">
+				<h2 className="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-white/50">
 					Страны{" "}
 					{rows.length > 0 && (
 						<span className="font-normal">({rows.length})</span>
 					)}
 				</h2>
 
-				{/* Поиск — base-ui Input */}
 				<Input
 					type="text"
 					value={globalFilter}
 					onChange={(e) => setGlobalFilter(e.target.value)}
 					placeholder="Поиск по названию..."
 					className={cn(
-						"w-full rounded-lg px-3 py-1.5 text-sm",
-						"bg-white/10 border border-white/20 text-white placeholder:text-white/40",
-						"outline-none focus:border-white/40 focus:bg-white/15 transition-colors"
+						"w-full rounded-lg px-3 py-1.5 text-sm transition-colors",
+						"bg-black/5 border border-black/10 text-gray-900 placeholder:text-gray-400",
+						"dark:bg-white/10 dark:border-white/20 dark:text-white dark:placeholder:text-white/40",
+						"outline-none focus:border-black/20 focus:bg-black/8",
+						"dark:focus:border-white/40 dark:focus:bg-white/15"
 					)}
 				/>
 
-				{/* Фильтр по региону — base-ui Menu */}
 				<Menu.Root>
 					<Menu.Trigger
 						className={cn(
 							"flex w-full items-center justify-between rounded-lg px-3 py-1.5 text-sm",
-							"bg-white/10 border border-white/20 text-white",
-							"outline-none focus:border-white/40 transition-colors cursor-pointer"
+							"bg-black/5 border border-black/10 text-gray-900",
+							"dark:bg-white/10 dark:border-white/20 dark:text-white",
+							"outline-none focus:border-black/20 dark:focus:border-white/40 transition-colors cursor-pointer"
 						)}
 					>
-						<span className={cn(!regionFilter && "text-white/60")}>
+						<span className={cn(!regionFilter && "text-gray-400 dark:text-white/60")}>
 							{regionFilter || "Все регионы"}
 						</span>
 						<svg
@@ -152,7 +150,7 @@ export function CountryTablePanel({
 							height="12"
 							viewBox="0 0 12 12"
 							fill="none"
-							className="ml-1 text-white/40"
+							className="ml-1 text-gray-400 dark:text-white/40"
 						>
 							<path
 								d="M3 4.5L6 7.5L9 4.5"
@@ -168,16 +166,17 @@ export function CountryTablePanel({
 						<Menu.Positioner sideOffset={4} align="end" className="z-50">
 							<Menu.Popup
 								className={cn(
-									"min-w-40 rounded-xl py-1",
-									"bg-white/10 backdrop-blur-md border border-white/20 shadow-2xl"
+									"min-w-40 rounded-xl py-1 backdrop-blur-md shadow-2xl",
+									"bg-white/90 border border-black/10",
+									"dark:bg-white/10 dark:border-white/20"
 								)}
 							>
 								<Menu.Item
 									onClick={() => setRegionFilter("")}
 									className={cn(
 										"flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer",
-										"outline-none data-highlighted:bg-white/10",
-										!regionFilter ? "text-white" : "text-white/60"
+										"outline-none data-highlighted:bg-black/5 dark:data-highlighted:bg-white/10",
+										!regionFilter ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-white/60"
 									)}
 								>
 									<span className="w-4 text-xs">
@@ -192,10 +191,10 @@ export function CountryTablePanel({
 										onClick={() => setRegionFilter(r)}
 										className={cn(
 											"flex items-center gap-2 px-3 py-1.5 text-sm cursor-pointer",
-											"outline-none data-highlighted:bg-white/10",
+											"outline-none data-highlighted:bg-black/5 dark:data-highlighted:bg-white/10",
 											regionFilter === r
-												? "text-white"
-												: "text-white/60"
+												? "text-gray-900 dark:text-white"
+												: "text-gray-400 dark:text-white/60"
 										)}
 									>
 										<span className="w-4 text-xs">
@@ -211,7 +210,7 @@ export function CountryTablePanel({
 			</div>
 
 			{/* Заголовки колонок */}
-			<div className="shrink-0 border-b border-white/20">
+			<div className="shrink-0 border-b border-black/10 dark:border-white/20">
 				{table.getHeaderGroups().map((hg) => (
 					<div key={hg.id} className="flex">
 						{hg.headers.map((header) => (
@@ -219,19 +218,16 @@ export function CountryTablePanel({
 								key={header.id}
 								onClick={header.column.getToggleSortingHandler()}
 								className={cn(
-									"px-3 py-2 text-xs font-semibold uppercase tracking-wide text-white/50 select-none",
+									"px-3 py-2 text-xs font-semibold uppercase tracking-wide select-none",
+									"text-gray-500 dark:text-white/50",
 									header.column.getCanSort() &&
-										"cursor-pointer hover:text-white/80 transition-colors",
+										"cursor-pointer hover:text-gray-700 dark:hover:text-white/80 transition-colors",
 									header.id === "name" && "flex-1 min-w-0",
 									header.id === "region" && "w-24 shrink-0",
-									header.id === "population" &&
-										"w-24 shrink-0 text-right"
+									header.id === "population" && "w-24 shrink-0 text-right"
 								)}
 							>
-								{flexRender(
-									header.column.columnDef.header,
-									header.getContext()
-								)}
+								{flexRender(header.column.columnDef.header, header.getContext())}
 								{header.column.getIsSorted() === "asc" && " ↑"}
 								{header.column.getIsSorted() === "desc" && " ↓"}
 							</div>
@@ -240,15 +236,17 @@ export function CountryTablePanel({
 				))}
 			</div>
 
-			{/* Виртуализированный список строк — base-ui ScrollArea */}
+			{/* Виртуализированный список строк */}
 			<ScrollArea.Root className="flex-1 min-h-0">
 				<ScrollArea.Viewport ref={scrollRef} className="h-full">
 					{isLoading && (
-						<p className="px-3 py-4 text-sm text-white/40">Загрузка...</p>
+						<p className="px-3 py-4 text-sm text-gray-400 dark:text-white/40">
+							Загрузка...
+						</p>
 					)}
 
 					{!isLoading && rows.length === 0 && (
-						<p className="px-3 py-4 text-sm text-white/40">
+						<p className="px-3 py-4 text-sm text-gray-400 dark:text-white/40">
 							Ничего не найдено
 						</p>
 					)}
@@ -279,10 +277,10 @@ export function CountryTablePanel({
 									className={cn(
 										"flex items-center cursor-pointer transition-colors",
 										isSelected
-											? "bg-[#e8c547]/25 text-[#e8c547]"
+											? "bg-[#e8c547]/25 text-[#b8960a] dark:text-[#e8c547]"
 											: isHovered
-												? "bg-[#5cb85c]/20 text-white"
-												: "text-white/80 hover:bg-white/10"
+												? "bg-[#5cb85c]/15 dark:bg-[#5cb85c]/20 text-gray-900 dark:text-white"
+												: "text-gray-700 dark:text-white/80 hover:bg-black/5 dark:hover:bg-white/10"
 									)}
 								>
 									{row.getVisibleCells().map((cell) => (
@@ -290,18 +288,14 @@ export function CountryTablePanel({
 											key={cell.id}
 											className={cn(
 												"px-3 text-sm truncate",
-												cell.column.id === "name" &&
-													"flex-1 min-w-0",
+												cell.column.id === "name" && "flex-1 min-w-0",
 												cell.column.id === "region" &&
-													"w-24 shrink-0 text-white/60 text-xs",
+													"w-24 shrink-0 text-gray-400 dark:text-white/60 text-xs",
 												cell.column.id === "population" &&
 													"w-24 shrink-0 text-right text-xs tabular-nums"
 											)}
 										>
-											{flexRender(
-												cell.column.columnDef.cell,
-												cell.getContext()
-											)}
+											{flexRender(cell.column.columnDef.cell, cell.getContext())}
 										</div>
 									))}
 								</div>
@@ -314,7 +308,7 @@ export function CountryTablePanel({
 					orientation="vertical"
 					className="flex w-1.5 touch-none select-none p-px mr-1"
 				>
-					<ScrollArea.Thumb className="flex-1 rounded-full bg-white/30" />
+					<ScrollArea.Thumb className="flex-1 rounded-full bg-black/20 dark:bg-white/30" />
 				</ScrollArea.Scrollbar>
 			</ScrollArea.Root>
 		</div>
