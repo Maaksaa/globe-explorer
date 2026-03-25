@@ -20,6 +20,7 @@ export class GlobeFeature extends Object3DFeature<GlobeModules> {
 	private drawFn: ((hoveredId?: string, selectedId?: string) => void) | null = null;
 	private hoveredId: string | undefined = undefined;
 	private selectedId: string | undefined = undefined;
+	onSelect: ((id: string | undefined, name: string | undefined) => void) | null = null;
 
 	// ── публичные методы (вызывает CountryPickerFeature) ──
 
@@ -33,10 +34,8 @@ export class GlobeFeature extends Object3DFeature<GlobeModules> {
 		if (this.selectedId === id) return;
 		this.selectedId = id;
 		this.refresh();
-	}
-
-	get currentSelectedId() {
-		return this.selectedId;
+		const name = this.countries.find((c) => c.id === id)?.name;
+		this.onSelect?.(id, name);
 	}
 
 	// ── lifecycle ──────────────────────────────

@@ -14,7 +14,7 @@ export class CountryPickerFeature extends Object3DFeature<GlobeModules> {
 	protected useCtx(ctx: CoreContext<GlobeModules>) {
 		this.globeFeature = KVY.getFeatureBy<GlobeFeature>(
 			this.object,
-			(f) => f.constructor === GlobeFeature,
+			(f) => f.constructor === GlobeFeature
 		);
 
 		const canvas = ctx.three.renderer.domElement;

@@ -1,7 +1,9 @@
-import { useGlobeContext } from "../hooks/useGlobeContext";
+import type { RefObject } from "react";
 
-export function GlobeCanvas() {
-	const { containerRef } = useGlobeContext();
+interface GlobeCanvasProps {
+	containerRef: RefObject<HTMLDivElement | null>;
+}
 
+export function GlobeCanvas({ containerRef }: GlobeCanvasProps) {
 	return <div ref={containerRef} className="h-full w-full" />;
 }

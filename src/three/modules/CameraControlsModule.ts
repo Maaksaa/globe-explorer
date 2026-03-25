@@ -35,10 +35,11 @@ export class CameraControlsModule extends CoreContextModule {
 			}
 		};
 
-		ctx.three.on("renderbefore", onBeforeRender);
+		const three = ctx.three as any;
+		three.on("renderbefore", onBeforeRender);
 
 		return () => {
-			ctx.three.off("renderbefore", onBeforeRender);
+			three.off("renderbefore", onBeforeRender);
 			this.controls?.dispose();
 			this.controls = null;
 		};

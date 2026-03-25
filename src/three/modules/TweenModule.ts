@@ -10,10 +10,11 @@ export class TweenModule extends CoreContextModule {
 			this.group.update();
 		};
 
-		ctx.three.on("renderbefore", onBeforeRender);
+		const three = ctx.three as any;
+		three.on("renderbefore", onBeforeRender);
 
 		return () => {
-			ctx.three.off("renderbefore", onBeforeRender);
+			three.off("renderbefore", onBeforeRender);
 			this.group.removeAll();
 		};
 	}

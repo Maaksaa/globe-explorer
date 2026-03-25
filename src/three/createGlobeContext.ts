@@ -43,8 +43,8 @@ export async function createGlobeContext() {
 	// Глобус — сфера с canvas-текстурой стран
 	const globeGroup = new THREE.Group();
 	ctx.root.add(globeGroup);
-	KVY.addFeature(globeGroup, GlobeFeature);
-	KVY.addFeature(globeGroup, CountryPickerFeature);
 
-	return ctx;
+	const globeFeature = KVY.addFeature(globeGroup, GlobeFeature);
+	KVY.addFeature(globeGroup, CountryPickerFeature);
+	return { ctx, globeFeature };
 }
