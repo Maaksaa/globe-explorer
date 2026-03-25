@@ -10,6 +10,24 @@ export interface CountryData {
 	cca3: string;
 }
 
+export interface CountrySummary {
+	ccn3: string;
+	name: { common: string };
+	region: string;
+	population: number;
+	area: number;
+}
+
+export async function fetchAllCountries(): Promise<CountrySummary[]> {
+	const res = await fetch(
+		"https://restcountries.com/v3.1/all?fields=ccn3,name,region,population,area"
+	);
+	if (!res.ok) throw new Error("Failed to fetch countries");
+	const data: CountrySummary[] = await res.json();
+	// Фильтруем записи без ccn3 (территории без числового ISO-кода)
+	return data.filter((c) => c.ccn3);
+}
+
 export async function fetchCountryByNumericId(numericId: string): Promise<CountryData> {
 	// REST Countries API принимает ccn3 — это числовой ISO-код (тот же что в world-atlas)
 	const res = await fetch(

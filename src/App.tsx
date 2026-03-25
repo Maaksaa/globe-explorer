@@ -1,12 +1,11 @@
 import { useGlobeContext } from "./hooks/useGlobeContext";
 import { GlobeCanvas } from "./components/GlobeCanvas";
 import { CountryInfoPanel } from "./components/CountryInfoPanel";
-import { CountryListPanel } from "./components/CountryListPanel";
+import { CountryTablePanel } from "./components/CountryTablePanel";
 
 function App() {
 	const {
 		containerRef,
-		countries,
 		selectedCountryId,
 		selectedCountryName,
 		hoveredCountryId,
@@ -19,8 +18,7 @@ function App() {
 		<div className="relative h-screen w-screen bg-black">
 			<GlobeCanvas containerRef={containerRef} />
 
-			<CountryListPanel
-				countries={countries}
+			<CountryTablePanel
 				selectedCountryId={selectedCountryId}
 				hoveredCountryId={hoveredCountryId}
 				onHover={hoverCountry}
